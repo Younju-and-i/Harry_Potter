@@ -84,7 +84,7 @@ custom_stops = stop_words - exclude_stops
 # ==========================================
 # STEP 2: 데이터 로드 및 텍스트 정제 (Cleaning)
 # ==========================================
-with open('./Harry_Potter_all_books_preprocessed.txt', 'r', encoding='utf-8') as f:
+with open('book/Harry_Potter_all_books_preprocessed.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
 print(f"--- [Step 2: 데이터 로드 및 정제] ---")

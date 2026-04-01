@@ -1,7 +1,7 @@
 import re
 import os
 import pandas as pd
-from metadata import metadata
+from .metadata import metadata
 
 def run():
     print("\n>>> [Step 2 & 3] 데이터 정제 및 고유명사 치환 시작")
@@ -13,7 +13,7 @@ def run():
         print(f"[디버그] {save_path} 폴더가 없어 생성했습니다.")
 
     # 2. 원본 로드
-    file_path = './Harry_Potter_all_books_preprocessed.txt'
+    file_path = 'book/Harry_Potter_all_books_preprocessed.txt'
     with open(file_path, 'r', encoding='utf-8') as f:
         text = f.read()
     print(f"[디버그] 원본 로드 완료: {len(text)}자")

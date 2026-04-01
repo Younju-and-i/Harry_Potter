@@ -2,7 +2,7 @@ import re
 import pandas as pd
 import pickle
 import os
-from metadata import metadata
+from .metadata import metadata
 
 def run():
     print("\n>>> [Step 6] 최종 빈도 분석 및 결과 리포트")

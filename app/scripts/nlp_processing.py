@@ -6,7 +6,7 @@ from nltk.tag import pos_tag
 from nltk.stem import WordNetLemmatizer
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from metadata import custom_stops
+from .metadata import custom_stops
 
 def run():
     print("\n>>> [Step 4 & 5] NLP 전처리 및 벡터화 시작")

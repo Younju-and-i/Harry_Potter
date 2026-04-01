@@ -1,9 +1,9 @@
 import nltk
 import os
 # 각 파일에서 run 함수를 가져옵니다 (파일명이 1_clean_and_token.py 라면 숫자로 시작해서 import가 안 될 수 있으니 파일명을 clean_token.py 등으로 바꾸는 것을 추천합니다)
-import clean_token as step1
-import nlp_processing as step2
-import relation_analysis as step3
+import scripts.clean_token as step1
+import scripts.nlp_processing as step2
+import scripts.relation_analysis as step3
 
 def setFolder():
     folder_path = "C:/nltk_data"
