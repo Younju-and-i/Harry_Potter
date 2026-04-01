@@ -143,3 +143,5 @@ vite.config.ts.timestamp-*
 .env
 __pycache__
 authorized_keys
+app/data/*
+

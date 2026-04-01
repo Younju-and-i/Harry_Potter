@@ -1,9 +1,56 @@
+import nltk
+from nltk.corpus import stopwords
+
+# STEP 1에서 사용하던 메타데이터
 metadata = {
-    "등장인물": ["Harry Potter", "Ron Weasley", "Hermione Granger", "Albus Dumbledore", "Lord Voldemort", "Severus Snape", "Rubeus Hagrid", "Draco Malfoy", "Neville Longbottom", "Sirius Black", "Remus Lupin", "Minerva McGonagall", "Bellatrix Lestrange", "Lucius Malfoy", "Ginny Weasley", "Molly Weasley", "Arthur Weasley", "Fred Weasley", "George Weasley", "Percy Weasley", "Bill Weasley", "Charlie Weasley", "Luna Lovegood", "Cedric Diggory", "Cho Chang", "Fleur Delacour", "Viktor Krum", "Alastor Moody", "Dolores Umbridge", "Cornelius Fudge", "Rufus Scrimgeour", "Peter Pettigrew", "James Potter", "Lily Potter", "Sybill Trelawney", "Gilderoy Lockhart", "Quirinus Quirrell", "Horace Slughorn", "Argus Filch", "Madam Pomfrey", "Dobby", "Kreacher", "Griphook", "Garrick Ollivander", "Rita Skeeter", "Vernon Dursley", "Petunia Dursley", "Dudley Dursley", "Aunt Marge", "Mrs. Figg"],
-    "장소": ["Hogwarts", "Privet Drive", "The Burrow", "Diagon Alley", "Hogsmeade", "Godric's Hollow", "Ministry of Magic", "Azkaban", "Platform Nine and Three-Quarters", "Gringotts", "The Leaky Cauldron", "Grimmauld Place", "Forbidden Forest", "Hagrid's Hut", "Great Hall", "Room of Requirement", "Chamber of Secrets", "Astronomy Tower", "Malfoy Manor", "Shell Cottage", "St. Mungo's", "Little Whinging", "King's Cross Station"],
-    "주문": ["Expecto Patronum", "Expelliarmus", "Avada Kedavra", "Crucio", "Imperio", "Lumos", "Nox", "Alohomora", "Wingardium Leviosa", "Stupefy", "Petrificus Totalus", "Accio", "Protego", "Sectumsempra", "Riddikulus", "Confundo", "Morsmordre", "Prior Incantato"],
-    "사물/아이템": ["Philosopher's Stone", "Elder Wand", "Resurrection Stone", "Invisibility Cloak", "The Marauder's Map", "Tom Riddle's Diary", "The Goblet of Fire", "Time-Turner", "Sword of Gryffindor", "Sorting Hat", "Firebolt", "Nimbus 2000", "Salazar Slytherin's Locket", "Helga Hufflepuff's Cup", "Rowena Ravenclaw's Diadem", "Marvolo Gaunt's Ring", "Pensieve", "Deluminator", "Golden Snitch", "Mirror of Erised", "Naginis", "Monster Book of Monsters"],
-    "시간": ["Nineteen years later", "First Wizarding War", "Second Wizarding War", "Hogwarts Express", "Halloween", "Christmas Break", "Easter Holidays", "O.W.L.s", "N.E.W.T.s", "Midnight", "Dusk", "Dawn", "Summer Holidays", "Triwizard Tournament", "The Yule Ball"],
-    "감정": ["Fear", "Bravery", "Anger", "Grief", "Love", "Loyalty", "Hatred", "Regret", "Joy", "Despair", "Hope", "Guilt", "Resentment", "Compassion"],
-    "관계": ["The Order of the Phoenix", "Death Eaters", "Dumbledore's Army", "Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff", "Pure-blood", "Muggle-born", "Half-blood", "Mudblood", "Squib"]
+    "등장인물": [
+        "Harry Potter", "Ron Weasley", "Hermione Granger", "Albus Dumbledore", "Lord Voldemort", 
+        "Severus Snape", "Rubeus Hagrid", "Draco Malfoy", "Neville Longbottom", "Sirius Black", 
+        "Remus Lupin", "Minerva McGonagall", "Bellatrix Lestrange", "Lucius Malfoy", "Ginny Weasley", 
+        "Molly Weasley", "Arthur Weasley", "Fred Weasley", "George Weasley", "Percy Weasley", 
+        "Bill Weasley", "Charlie Weasley", "Luna Lovegood", "Cedric Diggory", "Cho Chang", 
+        "Fleur Delacour", "Viktor Krum", "Alastor Moody", "Dolores Umbridge", "Cornelius Fudge", 
+        "Rufus Scrimgeour", "Peter Pettigrew", "James Potter", "Lily Potter", "Sybill Trelawney", 
+        "Gilderoy Lockhart", "Quirinus Quirrell", "Horace Slughorn", "Argus Filch", "Madam Pomfrey", 
+        "Dobby", "Kreacher", "Griphook", "Garrick Ollivander", "Rita Skeeter", "Vernon Dursley", 
+        "Petunia Dursley", "Dudley Dursley", "Aunt Marge", "Mrs. Figg"
+    ],
+    "가문": ["Potter", "Weasley", "Malfoy", "Black", "Lestrange", "Longbottom", "Granger", 
+            "Lovegood", "Crouch", "Riddle", "Gaunt", "Dumbledore", "Diggory", "Prewett", 
+            "Tonks", "Cattermole", "Dursley"],
+    "장소": ["Hogwarts", "Privet Drive", "The Burrow", "Diagon Alley", "Hogsmeade", "Godric's Hollow", 
+            "Ministry of Magic", "Azkaban", "Platform Nine and Three-Quarters", "Gringotts", 
+            "The Leaky Cauldron", "Grimmauld Place", "Forbidden Forest", "Hagrid's Hut", "Great Hall", 
+            "Room of Requirement", "Chamber of Secrets", "Astronomy Tower", "Malfoy Manor", 
+            "Shell Cottage", "St. Mungo's", "Little Whinging", "King's Cross Station"],
+    "주문": ["Expecto Patronum", "Expelliarmus", "Avada Kedavra", "Crucio", "Imperio", "Lumos", "Nox", 
+            "Alohomora", "Wingardium Leviosa", "Stupefy", "Petrificus Totalus", "Accio", "Protego", 
+            "Sectumsempra", "Riddikulus", "Confundo", "Morsmordre", "Prior Incantato"],
+    "사물/아이템": ["Philosopher's Stone", "Elder Wand", "Resurrection Stone", "Invisibility Cloak", 
+                  "The Marauder's Map", "Tom Riddle's Diary", "The Goblet of Fire", "Time-Turner", 
+                  "Sword of Gryffindor", "Sorting Hat", "Firebolt", "Nimbus 2000", "Salazar Slytherin's Locket", 
+                  "Helga Hufflepuff's Cup", "Rowena Ravenclaw's Diadem", "Marvolo Gaunt's Ring", "Pensieve", 
+                  "Deluminator", "Golden Snitch", "Mirror of Erised", "Naginis", "Monster Book of Monsters"],
+    "시간": ["Nineteen years later", "First Wizarding War", "Second Wizarding War", "Hogwarts Express", 
+            "Halloween", "Christmas Break", "Easter Holidays", "O.W.L.s", "N.E.W.T.s", "Midnight", 
+            "Dusk", "Dawn", "Summer Holidays", "Triwizard Tournament", "The Yule Ball"],
+    "감정": ["Fear", "Bravery", "Anger", "Grief", "Love", "Loyalty", "Hatred", "Regret", "Joy", 
+            "Despair", "Hope", "Guilt", "Resentment", "Compassion"],
+    "관계": ["The Order of the Phoenix", "Death Eaters", "Dumbledore's Army", "Gryffindor", "Slytherin", 
+            "Ravenclaw", "Hufflepuff", "Pure-blood", "Muggle-born", "Half-blood", "Mudblood", "Squib"]
 }
+
+characters_to_family = {
+    "Harry Potter": "potter_family", "James Potter": "potter_family", "Lily Potter": "potter_family",
+    "Draco Malfoy": "malfoy_family", "Lucius Malfoy": "malfoy_family",
+    "Ron Weasley": "weasley_family", "Fred Weasley": "weasley_family", "George Weasley": "weasley_family",
+    "Hermione Granger": "granger_family", "Sirius Black": "black_family",
+    "Bellatrix Lestrange": "lestrange_family", "Neville Longbottom": "longbottom_family",
+    "Luna Lovegood": "lovegood_family", "Cedric Diggory": "diggory_family",
+    "Vernon Dursley": "dursley_family", "Tom Riddle": "riddle_family"
+}
+
+# 불용어 설정 그대로 유지
+stop_words = set(stopwords.words('english'))
+exclude_stops = {'not', 'no', 'never', 'he', 'she', 'him', 'her', 'they', 'them'}
+custom_stops = stop_words - exclude_stops
